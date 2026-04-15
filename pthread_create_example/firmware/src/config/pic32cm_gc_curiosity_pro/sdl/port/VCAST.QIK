@@ -1,0 +1,37 @@
+--  QuickParse File Version: EDG_6_2  --
+HOME_DIRECTORY C:\Users\i77794\Desktop\port_led_on_off_polling\firmware\src\config\pic32cm_gc_curiosity_pro\sdl\port
+BEGIN_RECORD sdl_port.c
+CHECKSUM  1326470569
+BLACKLIST FALSE
+DEFINED_OBJECTS
+   SDL_PORT_InputOutputDirection
+   SDL_PORT_OutputMonitoring
+   SDL_PORT_PullUpPullDown
+   SDL_PORT_SFRReset
+   SDL_PORT_SFRWriteRead
+CALLED_OBJECTS
+   SDL_DRV_COMMON_SFRReset
+   SDL_DRV_COMMON_SFRWriteRead
+   SDL_DRV_COMMON_TimerDelay_us
+   SDL_DRV_PORT_DirClr
+   SDL_DRV_PORT_DirRead
+   SDL_DRV_PORT_DirSet
+   SDL_DRV_PORT_GetPortGroupAddress
+   SDL_DRV_PORT_IsPinValid
+   SDL_DRV_PORT_IsPortValid
+   SDL_DRV_PORT_OutClr
+   SDL_DRV_PORT_OutSet
+   SDL_DRV_PORT_PinRead
+   SDL_DRV_PORT_PullupEnable
+   _start
+STATIC_MEMBERS_DECLARED
+STATIC_MEMBERS_NEEDED
+GLOBAL_OBJECTS_NEEDED
+   __copy_table_end__
+   __copy_table_start__
+   __zero_table_end__
+   __zero_table_start__
+   portResetSFRInfo
+   portWRSFRInfo
+GLOBAL_OBJECTS_DEFINED
+END_RECORD sdl_port.c

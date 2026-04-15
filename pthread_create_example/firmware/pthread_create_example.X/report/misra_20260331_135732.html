@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+    "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+    <head>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+        <style>
+            h1 {
+                font-size: 1.6em;
+                font-weight: 400;
+                color: #98012D;
+            }
+            h2 {
+                font-size: 1.1em;
+                font-weight: 600;
+                color: #98012D;
+            }
+            h3 {
+                font-size: 1em;
+                font-weight: 400;
+            }
+            p {
+                margin: 1em;
+            }
+            body {
+                font-family: 'Open Sans',sans-serif;
+            }
+            table {
+                border-collapse: collapse;
+                margin: 1em;
+            }
+            table, th, td {
+                border: 1px solid black;
+                padding: 0px 10px;
+            }
+            th {
+                font-weight: 400;
+                text-align: left;
+                background: #E1B7B1;
+            }
+            li {
+                list-style: none;
+            }
+            li::before {
+                content: '\2022';
+                padding-right: 1em;
+                color: #98012D;
+                font-weight: bold;
+            }
+            .mandatory {
+                font-weight:  bold;
+                color: #ee2a24;
+            }  
+            .required {
+                font-weight:  bold;
+            }
+            .advisory {
+                font-weight:  normal;
+            } 
+            .error {
+                color: #ee2a24;
+            }
+            .success {
+                color: #28a745
+            }
+            .info {
+                font-style: italic;
+            }
+            .disabled {
+                color: #ee2a24;
+            }
+            .notSupported {
+                font-style: italic;
+                color: grey;
+            }
+            .code {
+                background: #f4f4f4;
+                border: 1px solid #ddd;
+                border-left: 3px solid #ffc107;
+                color: #666;
+                page-break-inside: avoid;
+                font-family: monospace;
+                max-width: 100%;
+                overflow: auto;
+                margin: 1em;
+                padding: 0em 1.5em;
+                display: block;
+            }    
+        </style>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>MISRA C:2012 results</title>
+    </head>
+    <body>
+        <h1>MISRA C:2012 compliance test results</h1>
+        <p>Date: <span class="info">2026-03-31 13:58:22</span></p>
+        <p>Project source folder: <span class="info">D:\Test\examples\pthread_create_example\firmware\src\config\pic32cm_gc_curiosity_pro\sdl\port\drv_port</span></p>
+        <h2>Issue summary (33):</h2><p class="error">The inspected code did not pass validation. The following violations were found:</p><table><tr><th>Rule ID</th><th>Classification</th><th>Location</th><th>Description</th></tr><tr class="advisory"><td>General issue</td><td>Advisory</td><td>D:\Test\examples\pthread_create_example\firmware\src\config\pic32cm_gc_curiosity_pro\sdl\port\drv_port\sdl_drv_port.c:44:0</td><td>information: Include file: <stdint.h> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]</td></tr><tr class="advisory"><td>General issue</td><td>Advisory</td><td>D:\Test\examples\pthread_create_example\firmware\src\config\pic32cm_gc_curiosity_pro\sdl\port\drv_port\..\..\common\drv_common\sdl_drv_common.h:56:0</td><td>information: Include file: <stdint.h> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]</td></tr><tr class="advisory"><td>General issue</td><td>Advisory</td><td>D:\Test\examples\pthread_create_example\firmware\src\config\pic32cm_gc_curiosity_pro\sdl\port\drv_port\..\..\common\drv_common\sdl_drv_common.h:57:0</td><td>information: Include file: <stddef.h> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]</td></tr><tr class="advisory"><td>General issue</td><td>Advisory</td><td>D:\Test\examples\pthread_create_example\firmware\src\config\pic32cm_gc_curiosity_pro\sdl\port\drv_port\..\..\common\drv_common\sdl_drv_common.h:58:0</td><td>information: Include file: "sdl/systick/drv_systick/sdl_drv_systick.h" not found. [missingInclude]</td></tr><tr class="advisory"><td>General issue</td><td>Advisory</td><td>D:\Test\examples\pthread_create_example\firmware\src\config\pic32cm_gc_curiosity_pro\sdl\port\drv_port\..\..\common\drv_common\sdl_drv_common.h:59:0</td><td>information: Include file: "sdl/common/sdl_common.h" not found. [missingInclude]</td></tr><tr class="advisory"><td>General issue</td><td>Advisory</td><td>D:\Test\examples\pthread_create_example\firmware\src\config\pic32cm_gc_curiosity_pro\sdl\port\drv_port\sdl_drv_port.h:58:0</td><td>information: Include file: <stddef.h> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]</td></tr><tr class="advisory"><td>General issue</td><td>Advisory</td><td>D:\Test\examples\pthread_create_example\firmware\src\config\pic32cm_gc_curiosity_pro\sdl\port\drv_port\sdl_drv_port.h:59:0</td><td>information: Include file: <stdbool.h> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]</td></tr><tr class="advisory"><td>General issue</td><td>Advisory</td><td>D:\Test\examples\pthread_create_example\firmware\src\config\pic32cm_gc_curiosity_pro\sdl\port\drv_port\sdl_drv_port.h:60:0</td><td>information: Include file: <stdint.h> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]</td></tr><tr class="advisory"><td>General issue</td><td>Advisory</td><td>D:\Test\examples\pthread_create_example\firmware\src\config\pic32cm_gc_curiosity_pro\sdl\port\drv_port\..\..\sdl_includes.h:57:0</td><td>information: Include file: "device.h" not found. [missingInclude]</td></tr><tr class="advisory"><td>General issue</td><td>Advisory</td><td>D:\Test\examples\pthread_create_example\firmware\src\config\pic32cm_gc_curiosity_pro\sdl\port\drv_port\sdl_drv_port.c:1146:43</td><td>style: Condition '(sdlPortAMask&mask)!=0U' is always false [knownConditionTrueFalse]</td></tr><tr class="advisory"><td>General issue</td><td>Advisory</td><td>D:\Test\examples\pthread_create_example\firmware\src\config\pic32cm_gc_curiosity_pro\sdl\port\drv_port\sdl_drv_port.c:1153:43</td><td>style: Condition '(sdlPortBMask&mask)!=0U' is always false [knownConditionTrueFalse]</td></tr><tr class="advisory"><td>General issue</td><td>Advisory</td><td>D:\Test\examples\pthread_create_example\firmware\src\config\pic32cm_gc_curiosity_pro\sdl\port\drv_port\sdl_drv_port.c:1159:43</td><td>style: Condition '(sdlPortCMask&mask)!=0U' is always false [knownConditionTrueFalse]</td></tr><tr class="advisory"><td>General issue</td><td>Advisory</td><td>D:\Test\examples\pthread_create_example\firmware\src\config\pic32cm_gc_curiosity_pro\sdl\port\drv_port\sdl_drv_port.c:1167:43</td><td>style: Condition '(sdlPortDMask&mask)!=0U' is always false [knownConditionTrueFalse]</td></tr><tr class="advisory"><td>General issue</td><td>Advisory</td><td>D:\Test\examples\pthread_create_example\firmware\src\config\pic32cm_gc_curiosity_pro\sdl\port\drv_port\sdl_drv_port.c:848:73</td><td>style: Operator '|' with one operand equal to zero is redundant. [badBitmaskCheck]</td></tr><tr class="advisory"><td>General issue</td><td>Advisory</td><td>D:\Test\examples\pthread_create_example\firmware\src\config\pic32cm_gc_curiosity_pro\sdl\port\drv_port\sdl_drv_port.c:859:73</td><td>style: Operator '|' with one operand equal to zero is redundant. [badBitmaskCheck]</td></tr><tr class="advisory"><td>General issue</td><td>Advisory</td><td>D:\Test\examples\pthread_create_example\firmware\src\config\pic32cm_gc_curiosity_pro\sdl\port\drv_port\sdl_drv_port.c:869:73</td><td>style: Operator '|' with one operand equal to zero is redundant. [badBitmaskCheck]</td></tr><tr class="advisory"><td>General issue</td><td>Advisory</td><td>D:\Test\examples\pthread_create_example\firmware\src\config\pic32cm_gc_curiosity_pro\sdl\port\drv_port\sdl_drv_port.c:879:74</td><td>style: Operator '|' with one operand equal to zero is redundant. [badBitmaskCheck]</td></tr><tr class="advisory"><td>8.9</td><td>Advisory</td><td>D:\Test\examples\pthread_create_example\firmware\src\config\pic32cm_gc_curiosity_pro\sdl\port\drv_port\sdl_drv_port.c:848:23</td><td>An object should be defined at block scope if its identifier only appears in a single function</td></tr><tr class="advisory"><td>8.9</td><td>Advisory</td><td>D:\Test\examples\pthread_create_example\firmware\src\config\pic32cm_gc_curiosity_pro\sdl\port\drv_port\sdl_drv_port.c:859:23</td><td>An object should be defined at block scope if its identifier only appears in a single function</td></tr><tr class="advisory"><td>8.9</td><td>Advisory</td><td>D:\Test\examples\pthread_create_example\firmware\src\config\pic32cm_gc_curiosity_pro\sdl\port\drv_port\sdl_drv_port.c:869:23</td><td>An object should be defined at block scope if its identifier only appears in a single function</td></tr><tr class="advisory"><td>8.9</td><td>Advisory</td><td>D:\Test\examples\pthread_create_example\firmware\src\config\pic32cm_gc_curiosity_pro\sdl\port\drv_port\sdl_drv_port.c:879:23</td><td>An object should be defined at block scope if its identifier only appears in a single function</td></tr><tr class="advisory"><td>8.11</td><td>Advisory</td><td>D:\Test\examples\pthread_create_example\firmware\src\config\pic32cm_gc_curiosity_pro\sdl\port\drv_port\sdl_drv_port.h:79:33</td><td>When an array with external linkage is declared, its size should be explicitly specified</td></tr><tr class="advisory"><td>17.8</td><td>Advisory</td><td>D:\Test\examples\pthread_create_example\firmware\src\config\pic32cm_gc_curiosity_pro\sdl\port\drv_port\sdl_drv_port.c:1138:17</td><td>A function parameter should not be modified</td></tr><tr class="advisory"><td>General issue</td><td>Advisory</td><td>D:\Test\examples\pthread_create_example\firmware\src\config\pic32cm_gc_curiosity_pro\sdl\port\drv_port\sdl_drv_port.c:1076:0</td><td>style: The function 'SDL_DRV_PORT_GetPortGroupAddress' is never used. [unusedFunction]</td></tr><tr class="advisory"><td>General issue</td><td>Advisory</td><td>D:\Test\examples\pthread_create_example\firmware\src\config\pic32cm_gc_curiosity_pro\sdl\port\drv_port\sdl_drv_port.c:1101:0</td><td>style: The function 'SDL_DRV_PORT_IsPortValid' is never used. [unusedFunction]</td></tr><tr class="advisory"><td>General issue</td><td>Advisory</td><td>D:\Test\examples\pthread_create_example\firmware\src\config\pic32cm_gc_curiosity_pro\sdl\port\drv_port\sdl_drv_port.c:1134:0</td><td>style: The function 'SDL_DRV_PORT_IsPinValid' is never used. [unusedFunction]</td></tr><tr class="advisory"><td>General issue</td><td>Advisory</td><td>D:\Test\examples\pthread_create_example\firmware\src\config\pic32cm_gc_curiosity_pro\sdl\port\drv_port\sdl_drv_port.c:1202:0</td><td>style: The function 'SDL_DRV_PORT_DirSet' is never used. [unusedFunction]</td></tr><tr class="advisory"><td>General issue</td><td>Advisory</td><td>D:\Test\examples\pthread_create_example\firmware\src\config\pic32cm_gc_curiosity_pro\sdl\port\drv_port\sdl_drv_port.c:1228:0</td><td>style: The function 'SDL_DRV_PORT_DirClr' is never used. [unusedFunction]</td></tr><tr class="advisory"><td>General issue</td><td>Advisory</td><td>D:\Test\examples\pthread_create_example\firmware\src\config\pic32cm_gc_curiosity_pro\sdl\port\drv_port\sdl_drv_port.c:1254:0</td><td>style: The function 'SDL_DRV_PORT_OutSet' is never used. [unusedFunction]</td></tr><tr class="advisory"><td>General issue</td><td>Advisory</td><td>D:\Test\examples\pthread_create_example\firmware\src\config\pic32cm_gc_curiosity_pro\sdl\port\drv_port\sdl_drv_port.c:1280:0</td><td>style: The function 'SDL_DRV_PORT_OutClr' is never used. [unusedFunction]</td></tr><tr class="advisory"><td>General issue</td><td>Advisory</td><td>D:\Test\examples\pthread_create_example\firmware\src\config\pic32cm_gc_curiosity_pro\sdl\port\drv_port\sdl_drv_port.c:1304:0</td><td>style: The function 'SDL_DRV_PORT_DirRead' is never used. [unusedFunction]</td></tr><tr class="advisory"><td>General issue</td><td>Advisory</td><td>D:\Test\examples\pthread_create_example\firmware\src\config\pic32cm_gc_curiosity_pro\sdl\port\drv_port\sdl_drv_port.c:1328:0</td><td>style: The function 'SDL_DRV_PORT_PinRead' is never used. [unusedFunction]</td></tr><tr class="advisory"><td>General issue</td><td>Advisory</td><td>D:\Test\examples\pthread_create_example\firmware\src\config\pic32cm_gc_curiosity_pro\sdl\port\drv_port\sdl_drv_port.c:1355:0</td><td>style: The function 'SDL_DRV_PORT_PullupEnable' is never used. [unusedFunction]</td></tr></table>
+        <h2>Files inspected (4):</h2><ul><li class="info">D:\Test\examples\pthread_create_example\firmware\src\config\pic32cm_gc_curiosity_pro\sdl\common\drv_common\sdl_drv_common.h</li><li class="info">D:\Test\examples\pthread_create_example\firmware\src\config\pic32cm_gc_curiosity_pro\sdl\port\drv_port\sdl_drv_port.c</li><li class="info">D:\Test\examples\pthread_create_example\firmware\src\config\pic32cm_gc_curiosity_pro\sdl\port\drv_port\sdl_drv_port.h</li><li class="info">D:\Test\examples\pthread_create_example\firmware\src\config\pic32cm_gc_curiosity_pro\sdl\sdl_includes.h</li></ul>
+        <h2>Issues suppressed by code comments (0):</h2><p class="success">No rules where suppressed by code comments:<p>
+        <h2>MISRA C:2012 rules summary:</h2>
+        <p>
+            <span class="info">
+                The following table shows which MISRA C:2012 rules were enabled during the 
+                compliance test run. Note that not all rules are supported by the tool.
+            </span>
+        </p>
+        <table><tr><th>Rule ID</th><th>Classification</th><th>Status</th></tr><tr><td>1.1</td><td>Required</td><td class="notSupported">Not supported</td></tr><tr><td>1.2</td><td>Advisory</td><td class="notSupported">Not supported</td></tr><tr><td>1.3</td><td>Required</td><td>Enabled</td></tr><tr><td>1.4</td><td>Required</td><td>Enabled</td></tr><tr><td>2.1</td><td>Required</td><td>Enabled</td></tr><tr><td>2.2</td><td>Required</td><td>Enabled</td></tr><tr><td>2.3</td><td>Advisory</td><td>Enabled</td></tr><tr><td>2.4</td><td>Advisory</td><td>Enabled</td></tr><tr><td>2.5</td><td>Advisory</td><td>Enabled</td></tr><tr><td>2.6</td><td>Advisory</td><td>Enabled</td></tr><tr><td>2.7</td><td>Advisory</td><td>Enabled</td></tr><tr><td>3.1</td><td>Required</td><td>Enabled</td></tr><tr><td>3.2</td><td>Required</td><td>Enabled</td></tr><tr><td>4.1</td><td>Required</td><td>Enabled</td></tr><tr><td>4.2</td><td>Advisory</td><td>Enabled</td></tr><tr><td>4.3</td><td>Required</td><td>Enabled</td></tr><tr><td>4.4</td><td>Advisory</td><td>Enabled</td></tr><tr><td>4.5</td><td>Advisory</td><td>Enabled</td></tr><tr><td>4.6</td><td>Advisory</td><td>Enabled</td></tr><tr><td>4.7</td><td>Required</td><td>Enabled</td></tr><tr><td>4.8</td><td>Advisory</td><td>Enabled</td></tr><tr><td>4.9</td><td>Advisory</td><td>Enabled</td></tr><tr><td>4.10</td><td>Required</td><td>Enabled</td></tr><tr><td>4.11</td><td>Required</td><td>Enabled</td></tr><tr><td>4.12</td><td>Required</td><td>Enabled</td></tr><tr><td>4.13</td><td>Advisory</td><td>Enabled</td></tr><tr><td>4.14</td><td>Required</td><td>Enabled</td></tr><tr><td>5.1</td><td>Required</td><td>Enabled</td></tr><tr><td>5.2</td><td>Required</td><td>Enabled</td></tr><tr><td>5.3</td><td>Required</td><td>Enabled</td></tr><tr><td>5.4</td><td>Required</td><td>Enabled</td></tr><tr><td>5.5</td><td>Required</td><td>Enabled</td></tr><tr><td>5.6</td><td>Required</td><td>Enabled</td></tr><tr><td>5.7</td><td>Required</td><td>Enabled</td></tr><tr><td>5.8</td><td>Required</td><td>Enabled</td></tr><tr><td>5.9</td><td>Advisory</td><td>Enabled</td></tr><tr><td>6.1</td><td>Required</td><td>Enabled</td></tr><tr><td>6.2</td><td>Required</td><td>Enabled</td></tr><tr><td>7.1</td><td>Required</td><td>Enabled</td></tr><tr><td>7.2</td><td>Required</td><td>Enabled</td></tr><tr><td>7.3</td><td>Required</td><td>Enabled</td></tr><tr><td>7.4</td><td>Required</td><td>Enabled</td></tr><tr><td>8.1</td><td>Required</td><td>Enabled</td></tr><tr><td>8.2</td><td>Required</td><td>Enabled</td></tr><tr><td>8.3</td><td>Required</td><td>Enabled</td></tr><tr><td>8.4</td><td>Required</td><td>Enabled</td></tr><tr><td>8.5</td><td>Required</td><td>Enabled</td></tr><tr><td>8.6</td><td>Required</td><td>Enabled</td></tr><tr><td>8.7</td><td>Advisory</td><td>Enabled</td></tr><tr><td>8.8</td><td>Required</td><td>Enabled</td></tr><tr><td>8.9</td><td>Advisory</td><td>Enabled</td></tr><tr><td>8.10</td><td>Required</td><td>Enabled</td></tr><tr><td>8.11</td><td>Advisory</td><td>Enabled</td></tr><tr><td>8.12</td><td>Required</td><td>Enabled</td></tr><tr><td>8.13</td><td>Advisory</td><td>Enabled</td></tr><tr><td>8.14</td><td>Required</td><td>Enabled</td></tr><tr><td>9.1</td><td>Mandatory</td><td>Enabled</td></tr><tr><td>9.2</td><td>Required</td><td>Enabled</td></tr><tr><td>9.3</td><td>Required</td><td>Enabled</td></tr><tr><td>9.4</td><td>Required</td><td>Enabled</td></tr><tr><td>9.5</td><td>Required</td><td>Enabled</td></tr><tr><td>10.1</td><td>Required</td><td>Enabled</td></tr><tr><td>10.2</td><td>Required</td><td>Enabled</td></tr><tr><td>10.3</td><td>Required</td><td>Enabled</td></tr><tr><td>10.4</td><td>Required</td><td>Enabled</td></tr><tr><td>10.5</td><td>Advisory</td><td>Enabled</td></tr><tr><td>10.6</td><td>Required</td><td>Enabled</td></tr><tr><td>10.7</td><td>Required</td><td>Enabled</td></tr><tr><td>10.8</td><td>Required</td><td>Enabled</td></tr><tr><td>11.1</td><td>Required</td><td>Enabled</td></tr><tr><td>11.2</td><td>Required</td><td>Enabled</td></tr><tr><td>11.3</td><td>Required</td><td>Enabled</td></tr><tr><td>11.4</td><td>Advisory</td><td>Enabled</td></tr><tr><td>11.5</td><td>Advisory</td><td>Enabled</td></tr><tr><td>11.6</td><td>Required</td><td>Enabled</td></tr><tr><td>11.7</td><td>Required</td><td>Enabled</td></tr><tr><td>11.8</td><td>Required</td><td>Enabled</td></tr><tr><td>11.9</td><td>Required</td><td>Enabled</td></tr><tr><td>12.1</td><td>Advisory</td><td>Enabled</td></tr><tr><td>12.2</td><td>Required</td><td>Enabled</td></tr><tr><td>12.3</td><td>Advisory</td><td>Enabled</td></tr><tr><td>12.5</td><td>Mandatory</td><td>Enabled</td></tr><tr><td>12.4</td><td>Advisory</td><td>Enabled</td></tr><tr><td>13.1</td><td>Required</td><td>Enabled</td></tr><tr><td>13.2</td><td>Required</td><td>Enabled</td></tr><tr><td>13.3</td><td>Advisory</td><td>Enabled</td></tr><tr><td>13.4</td><td>Advisory</td><td>Enabled</td></tr><tr><td>13.5</td><td>Required</td><td>Enabled</td></tr><tr><td>13.6</td><td>Mandatory</td><td>Enabled</td></tr><tr><td>14.1</td><td>Required</td><td>Enabled</td></tr><tr><td>14.2</td><td>Required</td><td>Enabled</td></tr><tr><td>14.3</td><td>Required</td><td>Enabled</td></tr><tr><td>14.4</td><td>Required</td><td>Enabled</td></tr><tr><td>15.1</td><td>Advisory</td><td>Enabled</td></tr><tr><td>15.2</td><td>Required</td><td>Enabled</td></tr><tr><td>15.3</td><td>Required</td><td>Enabled</td></tr><tr><td>15.4</td><td>Advisory</td><td>Enabled</td></tr><tr><td>15.5</td><td>Advisory</td><td>Enabled</td></tr><tr><td>15.6</td><td>Required</td><td>Enabled</td></tr><tr><td>15.7</td><td>Required</td><td>Enabled</td></tr><tr><td>16.1</td><td>Required</td><td>Enabled</td></tr><tr><td>16.2</td><td>Required</td><td>Enabled</td></tr><tr><td>16.3</td><td>Required</td><td>Enabled</td></tr><tr><td>16.4</td><td>Required</td><td>Enabled</td></tr><tr><td>16.5</td><td>Required</td><td>Enabled</td></tr><tr><td>16.6</td><td>Required</td><td>Enabled</td></tr><tr><td>16.7</td><td>Required</td><td>Enabled</td></tr><tr><td>17.1</td><td>Required</td><td>Enabled</td></tr><tr><td>17.2</td><td>Required</td><td>Enabled</td></tr><tr><td>17.3</td><td>Mandatory</td><td class="notSupported">Not supported</td></tr><tr><td>17.4</td><td>Mandatory</td><td>Enabled</td></tr><tr><td>17.5</td><td>Advisory</td><td>Enabled</td></tr><tr><td>17.6</td><td>Mandatory</td><td>Enabled</td></tr><tr><td>17.7</td><td>Required</td><td>Enabled</td></tr><tr><td>17.8</td><td>Advisory</td><td>Enabled</td></tr><tr><td>18.1</td><td>Required</td><td>Enabled</td></tr><tr><td>18.2</td><td>Required</td><td>Enabled</td></tr><tr><td>18.3</td><td>Required</td><td>Enabled</td></tr><tr><td>18.4</td><td>Advisory</td><td>Enabled</td></tr><tr><td>18.5</td><td>Advisory</td><td>Enabled</td></tr><tr><td>18.6</td><td>Required</td><td>Enabled</td></tr><tr><td>18.7</td><td>Required</td><td>Enabled</td></tr><tr><td>18.8</td><td>Required</td><td>Enabled</td></tr><tr><td>19.1</td><td>Mandatory</td><td>Enabled</td></tr><tr><td>19.2</td><td>Advisory</td><td>Enabled</td></tr><tr><td>20.1</td><td>Advisory</td><td>Enabled</td></tr><tr><td>20.2</td><td>Required</td><td>Enabled</td></tr><tr><td>20.3</td><td>Required</td><td>Enabled</td></tr><tr><td>20.4</td><td>Required</td><td>Enabled</td></tr><tr><td>20.5</td><td>Advisory</td><td>Enabled</td></tr><tr><td>20.6</td><td>Required</td><td>Enabled</td></tr><tr><td>20.7</td><td>Required</td><td>Enabled</td></tr><tr><td>20.8</td><td>Required</td><td>Enabled</td></tr><tr><td>20.9</td><td>Required</td><td>Enabled</td></tr><tr><td>20.10</td><td>Advisory</td><td>Enabled</td></tr><tr><td>20.11</td><td>Required</td><td>Enabled</td></tr><tr><td>20.12</td><td>Required</td><td>Enabled</td></tr><tr><td>20.13</td><td>Required</td><td>Enabled</td></tr><tr><td>20.14</td><td>Required</td><td>Enabled</td></tr><tr><td>21.1</td><td>Required</td><td>Enabled</td></tr><tr><td>21.2</td><td>Required</td><td>Enabled</td></tr><tr><td>21.3</td><td>Required</td><td>Enabled</td></tr><tr><td>21.4</td><td>Required</td><td>Enabled</td></tr><tr><td>21.5</td><td>Required</td><td>Enabled</td></tr><tr><td>21.6</td><td>Required</td><td>Enabled</td></tr><tr><td>21.7</td><td>Required</td><td>Enabled</td></tr><tr><td>21.8</td><td>Required</td><td>Enabled</td></tr><tr><td>21.9</td><td>Required</td><td>Enabled</td></tr><tr><td>21.10</td><td>Required</td><td>Enabled</td></tr><tr><td>21.11</td><td>Required</td><td>Enabled</td></tr><tr><td>21.12</td><td>Required</td><td>Enabled</td></tr><tr><td>21.13</td><td>Mandatory</td><td>Enabled</td></tr><tr><td>21.14</td><td>Required</td><td>Enabled</td></tr><tr><td>21.15</td><td>Required</td><td>Enabled</td></tr><tr><td>21.16</td><td>Required</td><td>Enabled</td></tr><tr><td>21.17</td><td>Mandatory</td><td>Enabled</td></tr><tr><td>21.18</td><td>Mandatory</td><td>Enabled</td></tr><tr><td>21.19</td><td>Mandatory</td><td>Enabled</td></tr><tr><td>21.20</td><td>Mandatory</td><td>Enabled</td></tr><tr><td>21.21</td><td>Required</td><td>Enabled</td></tr><tr><td>22.1</td><td>Required</td><td>Enabled</td></tr><tr><td>22.2</td><td>Mandatory</td><td>Enabled</td></tr><tr><td>22.3</td><td>Required</td><td>Enabled</td></tr><tr><td>22.4</td><td>Mandatory</td><td>Enabled</td></tr><tr><td>22.5</td><td>Mandatory</td><td>Enabled</td></tr><tr><td>22.6</td><td>Mandatory</td><td>Enabled</td></tr><tr><td>22.7</td><td>Required</td><td>Enabled</td></tr><tr><td>22.8</td><td>Required</td><td>Enabled</td></tr><tr><td>22.9</td><td>Required</td><td>Enabled</td></tr><tr><td>22.10</td><td>Required</td><td>Enabled</td></tr></table>
+        <h2>MISRA C:2012 directives checklist:</h2>
+		<p>
+            <span class="info">
+				The MISRA C:2012 directives requires manual review. 
+            </span>
+        </p>
+		<p>
+            <span class="info">
+				For a description of the following directives see  <a href="https://www.misra.org.uk/" target="_blank">misra.org.uk</a>. 
+            </span>
+        </p>
+        <table>
+                <tr><th>Directive ID</th><th>Group</th><th>Manual review</th></tr>
+                <tr><td>1.1</td><td>Implementation</td><td></td></tr>
+                <tr><td>2.1</td><td>Compilation and build</td><td></td></tr>
+                <tr><td>3.1</td><td>Requirements traceability</td><td></td></tr>
+                <tr><td>4.1</td><td>Code design</td><td></td></tr>
+                <tr><td>4.2</td><td>Code design</td><td></td></tr>			
+                <tr><td>4.3</td><td>Code design</td><td></td></tr>			
+                <tr><td>4.4</td><td>Code design</td><td></td></tr>
+                <tr><td>4.5</td><td>Code design</td><td></td></tr>
+                <tr><td>4.6</td><td>Code design</td><td></td></tr>
+                <tr><td>4.7</td><td>Code design</td><td></td></tr>
+                <tr><td>4.8</td><td>Code design</td><td></td></tr>
+                <tr><td>4.9</td><td>Code design</td><td></td></tr>
+                <tr><td>4.10</td><td>Code design</td><td></td></tr>
+                <tr><td>4.11</td><td>Code design</td><td></td></tr>
+                <tr><td>4.12</td><td>Code design</td><td></td></tr>
+                <tr><td>4.13</td><td>Code design</td><td></td></tr>
+                <tr><td>4.14</td><td>Code design</td><td></td></tr>
+        </table>
+    </body>
+</html>
