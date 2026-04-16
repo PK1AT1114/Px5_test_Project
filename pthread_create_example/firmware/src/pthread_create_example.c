@@ -124,13 +124,15 @@ do {                                                                         \
 /*============================================================================*/
 /*                      GLOBAL VARIABLES & THREAD HANDLES                      */
 /*============================================================================*/
+bool diagDataReady = false;
 pthread_t Led_toggle_thread;
 pthread_t Diagnostic_Test_thread;
 pthread_t service_task_thread;
 pthread_t Communication_task_thread;
 
 /* Synchronization */
-pthread_mutex_t evenOddLock;
+pthread_mutex_t dataLock;
+pthread_mutex_t diagDataLock;
 pthread_cond_t  cond;
 
 /* Shared variable */
@@ -139,6 +141,17 @@ int current_number = 0;
 /* RTOS memory */
 u_long memory_area[MEMORY_WORDS];
 
+SDL_PORT_CONFIG arg ={    
+    .sdlPortGroup       = 3,
+    .sdlPortPin         = SDL_PIN_PD07,
+    .sdlPortPinState    = SDL_PORT_PIN_HIGH,
+    .sdlPortDir         = SDL_PORT_PIN_OUTPUT,
+    .sdlPortPullupState = SDL_PORT_PIN_PULL_UP,
+    .sdlPortOprMode     = SDL_CONTEXT_POST
+};
+SDL_STATUS DiagStatusPort = SDL_STATUS_NOT_EXECUTED;
+
+uint16_t DiagStatus = 0x00;
 
 /*============================================================================*/
 /*                          FEATURE-SPECIFIC VARIABLES                         */
@@ -167,9 +180,9 @@ uint16_t ledBrightnessCtrl = 0x00;
 uint16_t switchInfo = 0x0;
 #endif
 
-#if (AMBIENT || SWITCH || PROXIMITY3 || PROXIMITY_AMBIENT)
+
 static uint8_t Can0MessageRAM[CAN0_MESSAGE_RAM_CONFIG_SIZE]__attribute__((aligned(32)));
-#endif
+
 
 
 /*============================================================================*/
@@ -205,7 +218,28 @@ uint32_t sys_now(void)
 {
     return systick.tickCounter;
 }
-
+static uint8_t updateStatus(SDL_STATUS status)
+{
+    uint8_t diagStatus = 0x00;
+    switch (status)
+    {
+        case SDL_STATUS_NOT_EXECUTED:
+            diagStatus = 0x00;
+            break;
+        case SDL_STATUS_IN_PROGRESS:
+            diagStatus = 0x01;
+            break;
+        case SDL_STATUS_PASSED:
+            diagStatus = 0x03;
+            break;
+        case SDL_STATUS_FAILED:
+            diagStatus = 0x04;
+            break;
+        default:
+            break;
+    }
+    return diagStatus;
+}
 
 /*============================================================================*/
 /*                         CAN CALLBACK HANDLERS                               */
@@ -215,14 +249,37 @@ static void OnCanMessageReceived(const APP_CAN_MSG *msg,
 {
     const char *sourceStr[] = {"FIFO0", "FIFO1", "Buffer"};
 
-    printf(" RX [%s] ID:0x%X Len:%d Data:",
-           sourceStr[source],
-           (unsigned int)msg->id,
-           msg->length);
+    printf(" RX [%s] ID:0x%X Len:%d Data:", sourceStr[source], (unsigned int)msg->id, msg->length);
+    
+    switch(msg->id)
+    {
+        
+        case LED_PWM_ID:     
+#if LED_PWM
+                ledBrightnessCtrl = 0x00;
+                for (uint8_t i = 0; i < msg->length; i++)
+                {
+                    ledBrightnessCtrl |= (msg->data[i] << (i*8));
+                } 
+#endif
+                break;
 
+        case SERVO_ID:   
+#if SERVO
+                switchInfo = 0x00;
+                for (uint8_t i = 0; i < msg->length; i++)
+                {
+                    switchInfo |= (msg->data[i] << (i*8));
+                }   
+#endif
+                break;                
+        default:
+            /* Ignore invalid input silently */
+            break;                        
+    }
     for (uint8_t i = 0; i < msg->length; i++)
     {
-        printf(" %02X", msg->data[i]);
+        printf(" %02X", msg->data[i]);    
     }
 
     printf("\r\n");
@@ -230,8 +287,9 @@ static void OnCanMessageReceived(const APP_CAN_MSG *msg,
 
 static void OnCanTransmitComplete(bool success)
 {
-    printf(" TX %s\r\n", success ? "Success" : "Failed");
+//    printf(" TX %s\r\n", success ? "Success" : "Failed");
 }
+
 
 static void SendSensorPacket(uint8_t *sensorData, uint8_t dataLen, uint16_t sensorID)
 {
@@ -253,6 +311,25 @@ static void SendSensorPacket(uint8_t *sensorData, uint8_t dataLen, uint16_t sens
 }
 
 
+static void APP_DIAG_PORT_FaultInjectCallback(uintptr_t context)
+{
+    PORT_REGS->GROUP[3].PORT_OUTCLR |=(0x1<<0x07);
+}
+static void APP_DIAG_SRAM_FaultInjectCallback(uintptr_t context)
+{
+    PORT_REGS->GROUP[3].PORT_OUTCLR |=(0x1<<0x07);
+}
+
+#if AMBIENT 
+static void APP_DIAG_ADC_Enable_FaultInjectCallback(uintptr_t context)
+{
+    
+}
+static void APP_DIAG_ADC_Resultion_FaultInjectCallback(uintptr_t context)
+{
+    
+}
+#endif
 /*============================================================================*/
 /*                         INITIALIZATION                                      */
 /*============================================================================*/
@@ -291,32 +368,33 @@ void APP_Initialize(void)
     APP_CAN_Initialize(Can0MessageRAM);
     APP_CAN_RegisterRxCallback(OnCanMessageReceived);
     APP_CAN_RegisterTxCallback(OnCanTransmitComplete);
+    EIC_CallbackRegister(EIC_PIN_0,APP_DIAG_PORT_FaultInjectCallback, 0);
+    EIC_CallbackRegister(EIC_PIN_1,APP_DIAG_SRAM_FaultInjectCallback, 0);
+#if AMBIENT 
+    EIC_CallbackRegister(EIC_PIN_2,APP_DIAG_ADC_Enable_FaultInjectCallback, 0);
+    EIC_CallbackRegister(EIC_PIN_15,APP_DIAG_ADC_Resultion_FaultInjectCallback, 0);
+#endif
 }
 
 
 /*============================================================================*/
 /*                         HARDWARE CONFIG                                     */
 /*============================================================================*/
-static void set_pin_mux(uint8_t port_id,
-                        uint8_t pin_id,
-                        uint8_t function)
+#if LED_PWM
+static void set_pin_mux(uint8_t port_id, uint8_t pin_id, uint8_t function)
 {
     PORT_REGS->GROUP[port_id].PORT_PINCFG[pin_id] = 0x1;
 
     if (pin_id % 2 == 1)
     {
-        PORT_REGS->GROUP[port_id].PORT_PMUX[pin_id / 2] =
-            (PORT_REGS->GROUP[port_id].PORT_PMUX[pin_id / 2] & 0x0F) |
-            (function << 4);
+        PORT_REGS->GROUP[port_id].PORT_PMUX[pin_id / 2] = (PORT_REGS->GROUP[port_id].PORT_PMUX[pin_id / 2] & 0x0F) | (function << 4);
     }
     else
     {
-        PORT_REGS->GROUP[port_id].PORT_PMUX[pin_id / 2] =
-            (PORT_REGS->GROUP[port_id].PORT_PMUX[pin_id / 2] & 0xF0) |
-            function;
+        PORT_REGS->GROUP[port_id].PORT_PMUX[pin_id / 2] = (PORT_REGS->GROUP[port_id].PORT_PMUX[pin_id / 2] & 0xF0) | function;
     }
 }
-
+#endif
 
 /*============================================================================*/
 /*                         THREAD FUNCTIONS                                   */
@@ -336,9 +414,13 @@ void *Led_toggle(void *arguments)
 
 void *Diagnostic_Test(void *arguments)
 {
+    arg.sdlPortOprMode     = SDL_CONTEXT_IN_USE;
     while (1)
-    {
-        /* Reserved */
+    {        
+        DiagStatusPort = SDL_PORT_OutputMonitoring(&arg);
+        DiagStatus |= updateStatus(DiagStatusPort);
+        diagDataReady = true;
+        px5_pthread_tick_sleep(500);
     }
 }
 
@@ -398,6 +480,7 @@ void *service_task(void *arguments)
             {
                 angleStatus = false;
             }
+            switchInfo = 0x00;
         }
         else if (switchInfo == SWITCH_SW1_MASK)
         {
@@ -409,13 +492,14 @@ void *service_task(void *arguments)
             }
 
             angleStatus = true;
+            switchInfo = 0x00;
         }
 
         servo_service();
 #endif
 
         /* Shared Data Update */
-        pthread_mutex_lock(&evenOddLock);
+        pthread_mutex_lock(&dataLock);
 
 #if AMBIENT
         Ambiant_data = ambient_UpdateLightIntensity();
@@ -443,11 +527,11 @@ void *service_task(void *arguments)
         }
 #endif
 
-        pthread_mutex_unlock(&evenOddLock);
+        pthread_mutex_unlock(&dataLock);
 
         /* Sleep */
 #if (SERVO || SWITCH)
-        px5_pthread_tick_sleep(20);
+        px5_pthread_tick_sleep(10);
 #elif LED_PWM
         px5_pthread_tick_sleep(DELAY_LED);
 #else
@@ -464,30 +548,98 @@ void *service_task(void *arguments)
 /*============================================================================*/
 void *Communication_task(void *arguments)
 {
+#if AMBIENT
+    uint16_t comAmbiantdata = 0x00;
+#endif
+    
+#if PROXIMITY3
+    uint16_t comvcnl4200Proximity_data = 0x00;
+#endif
+    
+#if PROXIMITY_AMBIENT
+    uint16_t comvcnl4200Ambiant_data = 0x00;
+#endif
+    
+#if SWITCH
+    uint16_t comswitchInfo = 0x00;
+#endif
+    uint16_t comDiagStatus = 0x00;
     while (1)
     {
-        pthread_mutex_lock(&evenOddLock);
+        pthread_mutex_lock(&dataLock);
+#if AMBIENT
+        comAmbiantdata = Ambiant_data;
+#endif
+    
+#if PROXIMITY3
+        comvcnl4200Proximity_data = vcnl4200Proximity_data;
+#endif
+    
+#if PROXIMITY_AMBIENT
+        comvcnl4200Ambiant_data = vcnl4200Ambiant_data;
+#endif
+    
+#if SWITCH
+        comswitchInfo = switchInfo;
+#endif        
+        pthread_mutex_unlock(&dataLock);
+        
+        pthread_mutex_lock(&dataLock);
+        
+        comDiagStatus = DiagStatus;
+        
+        pthread_mutex_unlock(&diagDataLock);
 
 #if AMBIENT
         printf("\033[1m\033[33mAmbient Value: %d\r\n", Ambiant_data);
+        SendSensorPacket((uint8_t *)&comAmbiantdata, sizeof(comAmbiantdata), AMBIENT_ID);
 #endif
 
 #if PROXIMITY3
-        printf("\033[1m\033[33mvcnl4200Proximity Value: %d\r\n",
-               vcnl4200Proximity_data);
+        printf("\033[1m\033[33mvcnl4200Proximity Value: %d\r\n", vcnl4200Proximity_data);
+        SendSensorPacket((uint8_t *)&comvcnl4200Proximity_data, sizeof(comvcnl4200Proximity_data), PROXIMITY3_ID);
 #endif
 
 #if PROXIMITY_AMBIENT
-        printf("\033[1m\033[33mvcnl4200Ambiant Value: %d\r\n",
-               vcnl4200Ambiant_data);
+        printf("\033[1m\033[33mvcnl4200Ambiant Value: %d\r\n", vcnl4200Ambiant_data);
+        SendSensorPacket((uint8_t *)&comvcnl4200Ambiant_data, sizeof(comvcnl4200Ambiant_data), PROXIMITY3_ID);
 #endif
 
 #if SWITCH
+        APP_CAN_Tasks();
         printf("\033[1m\033[33mSwitch State: %d\r\n", switchInfo);
-        SendSensorPacket((uint8_t *)&switchInfo, sizeof(switchInfo), 0x0100);
+        SendSensorPacket((uint8_t *)&comswitchInfo, sizeof(comswitchInfo), SWITCH_ID);
 #endif
-
-        pthread_mutex_unlock(&evenOddLock);
+        if(diagDataReady == true)
+        {     
+            APP_CAN_Tasks();
+#if AMBIENT
+            SendSensorPacket((uint8_t *)&comDiagStatus, sizeof(comDiagStatus), DIAG_AMBIENT_ID);
+#endif
+    
+#if PROXIMITY3
+            SendSensorPacket((uint8_t *)&comDiagStatus, sizeof(comDiagStatus), DIAG_PROXIMITY3_ID);
+#endif
+    
+#if PROXIMITY_AMBIENT
+            SendSensorPacket((uint8_t *)&comDiagStatus, sizeof(comDiagStatus), DIAG_PROXIMITY3_ID);
+#endif
+    
+#if SWITCH
+            SendSensorPacket((uint8_t *)&comDiagStatus, sizeof(comDiagStatus), DIAG_SWITCH_ID);
+#endif
+            
+#if SERVO
+            SendSensorPacket((uint8_t *)&comDiagStatus, sizeof(comDiagStatus), DIAG_SERVO_ID);
+#endif
+            
+#if LED_PWM
+            SendSensorPacket((uint8_t *)&comDiagStatus, sizeof(comDiagStatus), DIAG_LED_PWM_ID);
+#endif            
+            printf("\033[1m\033[33mDiag Status: %d\r\n", comDiagStatus);
+            DiagStatus = 0x00; 
+            diagDataReady = false;
+        }
 
         px5_pthread_tick_sleep(100);
     }
@@ -501,11 +653,16 @@ void *Communication_task(void *arguments)
 /*============================================================================*/
 int main(void)
 {
+    DiagStatusPort = SDL_PORT_OutputMonitoring(&arg);
     platform_setup();
     APP_Initialize();
-
+#if LED_PWM
     set_pin_mux(2, 9, 5);
-
+#endif
+//    APP_CAN_Tasks();
+    DiagStatus |= updateStatus(DiagStatusPort);
+    printf("\033[1m\033[33mSwitch State: %d\r\n", DiagStatus); 
+//    SendSensorPacket((uint8_t *)&DiagStatus, sizeof(DiagStatus), DIAG_SERVO_ID);
     pthread_mutexattr_t mutexAttr;
 
     pthread_mutexattr_init(&mutexAttr);
@@ -515,15 +672,16 @@ int main(void)
 
     px5_pthread_start(0xBD93A508, memory_area, sizeof(memory_area));
 
-    pthread_mutex_init(&evenOddLock, &mutexAttr);
+    pthread_mutex_init(&dataLock, &mutexAttr);
+    pthread_mutex_init(&diagDataLock, NULL);
     pthread_mutexattr_destroy(&mutexAttr);
     pthread_cond_init(&cond, NULL);
 
     /* Create threads */
     pthread_create(&Led_toggle_thread, NULL, Led_toggle, NULL);
     pthread_create(&service_task_thread, NULL, service_task, NULL);
-    pthread_create(&Communication_task_thread, NULL,
-                   Communication_task, NULL);
+    pthread_create(&Communication_task_thread, NULL, Communication_task, NULL);
+    pthread_create(&Diagnostic_Test_thread, NULL, Diagnostic_Test, NULL);
 
     pthread_join(service_task_thread, NULL);
     pthread_join(Communication_task_thread, NULL);

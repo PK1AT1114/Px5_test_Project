@@ -39,8 +39,8 @@
 #define PROXIMITY_AMBIENT       0
 #define WEATHER                 0
 #define SERVO                   1
-#define LED_PWM                 1
-#define SWITCH                  1
+#define LED_PWM                 0
+#define SWITCH                  0
 
 #define AMBIENT_ID              0x100
 #define PROXIMITY3_ID           0x200
@@ -48,11 +48,11 @@
 #define LED_PWM_ID              0x400
 #define SWITCH_ID               0x500
 
-#define DIAG_AMBIENT_ID         0x111
-#define DIAG_PROXIMITY3_ID      0x222
-#define DIAG_SERVO_ID           0x333
-#define DIAG_LED_PWM_ID         0x444
-#define DIAG_SWITCH_ID          0x555
+#define DIAG_AMBIENT_ID         0x101
+#define DIAG_PROXIMITY3_ID      0x201
+#define DIAG_SERVO_ID           0x301
+#define DIAG_LED_PWM_ID         0x401
+#define DIAG_SWITCH_ID          0x501
 
 #if defined AMBIENT
 #define ADC 1

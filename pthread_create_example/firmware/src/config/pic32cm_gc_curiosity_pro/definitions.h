@@ -74,6 +74,7 @@
 #include "system/dma/sys_dma.h"
 #include "osal/osal.h"
 #include "system/debug/sys_debug.h"
+#include "sdl/sdl_definitions.h"
 //#include "app.h"
 
 

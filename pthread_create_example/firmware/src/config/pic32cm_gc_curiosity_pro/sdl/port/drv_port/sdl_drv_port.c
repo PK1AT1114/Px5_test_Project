@@ -5,7 +5,7 @@
     Microchip Technology Inc.
 
   File Name:
-    sdl_port.c
+    sdl_drv_port.c
 
   Summary:
     Source file for port diagnostic routines.
@@ -841,7 +841,6 @@
 *------------------------------------------------------------------------------------------------------------*/
 /* None */
 
-
 /*------------------------------------------------------------------------------------------------------------
 * Global Variables
 *------------------------------------------------------------------------------------------------------------*/
@@ -1202,6 +1201,7 @@ SDL_BOOL SDL_DRV_PORT_IsPinValid(uint8_t sdlPortPin)
 void SDL_DRV_PORT_DirSet(uint8_t sdlPortGroup, uint8_t sdlPortPin)
 {
     PORT_REGS->GROUP[sdlPortGroup].PORT_DIR |= (1UL << (uint32_t)sdlPortPin);
+    PORT_REGS->GROUP[sdlPortGroup].PORT_PINCFG[sdlPortPin] = (uint8_t)(PORT_PINCFG_INEN_Msk);
 }
 
 /* Function:
@@ -1228,6 +1228,7 @@ void SDL_DRV_PORT_DirSet(uint8_t sdlPortGroup, uint8_t sdlPortPin)
 void SDL_DRV_PORT_DirClr(uint8_t sdlPortGroup, uint8_t sdlPortPin)
 {
     PORT_REGS->GROUP[sdlPortGroup].PORT_DIR &= ~(1UL << (uint32_t)sdlPortPin);
+    PORT_REGS->GROUP[sdlPortGroup].PORT_PINCFG[sdlPortPin] = (uint8_t)(PORT_PINCFG_INEN_Msk);
 }
 
 /* Function:

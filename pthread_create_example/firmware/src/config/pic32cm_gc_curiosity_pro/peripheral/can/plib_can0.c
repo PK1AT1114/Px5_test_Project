@@ -71,15 +71,28 @@ static const can_mram_sidfe_registers_t can0StdFilter[] =
 {
     {
         .CAN_S0 = CAN_S0_SFT(0UL) |
-                  CAN_S0_SFID1(0x45aUL) |
-                  CAN_S0_SFID2(0x45aUL) |
+                  CAN_S0_SFID1(0x0UL) |
+                  CAN_S0_SFID2(0x501UL) |
                   CAN_S0_SFEC(1UL)
     },
+
     {
         .CAN_S0 = CAN_S0_SFT(0UL) |
                   CAN_S0_SFID1(0x0UL) |
-                  CAN_S0_SFID2(0x469UL) |
+                  CAN_S0_SFID2(0x501UL) |
                   CAN_S0_SFEC(7UL)
+    },
+};
+
+static const can_mram_xidfe_registers_t can0ExtFilter[] =
+{
+    {
+        .CAN_F0 = CAN_F0_EFID1(0x0UL) | CAN_F0_EFEC(7UL),
+        .CAN_F1 = CAN_F1_EFID2(0x100000a5UL) | CAN_F1_EFT(0UL),
+    },
+    {
+        .CAN_F0 = CAN_F0_EFID1(0x10000096UL) | CAN_F0_EFEC(1UL),
+        .CAN_F1 = CAN_F1_EFID2(0x10000096UL) | CAN_F1_EFT(0UL),
     },
 };
 
@@ -143,6 +156,9 @@ void CAN0_Initialize(void)
 
     /* Global Filter Configuration Register */
     CAN0_REGS->CAN_GFC = CAN_GFC_ANFS_REJECT | CAN_GFC_ANFE_REJECT;
+
+    /* Extended ID AND Mask Register */
+    CAN0_REGS->CAN_XIDAM = CAN_XIDAM_Msk;
 
     /* Set the operation mode */
     CAN0_REGS->CAN_CCCR |= CAN_CCCR_FDOE_Msk | CAN_CCCR_BRSE_Msk;
@@ -537,7 +553,7 @@ void CAN0_ErrorCountGet(uint8_t *txErrorCount, uint8_t *rxErrorCount)
    Returns:
     None
 */
-/* MISRA C-2012 Rule 11.3 violated 6 times below. Deviation record ID - H3_MISRAC_2012_R_11_3_DR_1*/
+/* MISRA C-2012 Rule 11.3 violated 7 times below. Deviation record ID - H3_MISRAC_2012_R_11_3_DR_1*/
 void CAN0_MessageRAMConfigSet(uint8_t *msgRAMConfigBaseAddress)
 {
     uint32_t offset = 0U;
@@ -591,6 +607,14 @@ void CAN0_MessageRAMConfigSet(uint8_t *msgRAMConfigBaseAddress)
     /* Standard ID Filter Configuration Register */
     CAN0_REGS->CAN_SIDFC = CAN_SIDFC_LSS(2UL) |
             CAN_SIDFC_FLSSA(((uint32_t)can0Obj.msgRAMConfig.stdMsgIDFilterAddress >> 2));
+
+    can0Obj.msgRAMConfig.extMsgIDFilterAddress = (can_mram_xidfe_registers_t *)(msgRAMConfigBaseAddr + offset);
+    (void) memcpy((void*)can0Obj.msgRAMConfig.extMsgIDFilterAddress,
+           (const void*)can0ExtFilter,
+           CAN0_EXT_MSG_ID_FILTER_SIZE);
+    /* Extended ID Filter Configuration Register */
+    CAN0_REGS->CAN_XIDFC = CAN_XIDFC_LSE(2UL) |
+            CAN_XIDFC_FLESA(((uint32_t)can0Obj.msgRAMConfig.extMsgIDFilterAddress >> 2));
 
 
     /* Reference offset variable once to remove warning about the variable not being used after increment */
@@ -668,6 +692,69 @@ bool CAN0_StandardFilterElementGet(uint8_t filterNumber, can_mram_sidfe_register
     return retval;
 }
 
+// *****************************************************************************
+/* Function:
+    bool CAN0_ExtendedFilterElementSet(uint8_t filterNumber, can_mram_xidfe_registers_t *extMsgIDFilterElement)
+
+   Summary:
+    Set a Extended filter element configuration.
+
+   Precondition:
+    CAN0_Initialize and CAN0_MessageRAMConfigSet must have been called
+    for the associated CAN instance.
+
+   Parameters:
+    filterNumber          - Extended Filter number to be configured.
+    extMsgIDFilterElement - Pointer to Extended Filter Element configuration to be set on specific filterNumber.
+
+   Returns:
+    Request status.
+    true  - Request was successful.
+    false - Request has failed.
+*/
+bool CAN0_ExtendedFilterElementSet(uint8_t filterNumber, can_mram_xidfe_registers_t *extMsgIDFilterElement)
+{
+    bool retval = false;
+    if (!((filterNumber > 2U) || (extMsgIDFilterElement == NULL)))
+    {
+        can0Obj.msgRAMConfig.extMsgIDFilterAddress[filterNumber - 1U].CAN_F0 = extMsgIDFilterElement->CAN_F0;
+        can0Obj.msgRAMConfig.extMsgIDFilterAddress[filterNumber - 1U].CAN_F1 = extMsgIDFilterElement->CAN_F1;
+        retval = true;
+    }
+    return retval;
+}
+
+// *****************************************************************************
+/* Function:
+    bool CAN0_ExtendedFilterElementGet(uint8_t filterNumber, can_mram_xidfe_registers_t *extMsgIDFilterElement)
+
+   Summary:
+    Get a Extended filter element configuration.
+
+   Precondition:
+    CAN0_Initialize and CAN0_MessageRAMConfigSet must have been called
+    for the associated CAN instance.
+
+   Parameters:
+    filterNumber          - Extended Filter number to get filter configuration.
+    extMsgIDFilterElement - Pointer to Extended Filter Element configuration for storing filter configuration.
+
+   Returns:
+    Request status.
+    true  - Request was successful.
+    false - Request has failed.
+*/
+bool CAN0_ExtendedFilterElementGet(uint8_t filterNumber, can_mram_xidfe_registers_t *extMsgIDFilterElement)
+{
+    bool retval = false;
+    if (!((filterNumber > 2U) || (extMsgIDFilterElement == NULL)))
+    {
+        extMsgIDFilterElement->CAN_F0 = can0Obj.msgRAMConfig.extMsgIDFilterAddress[filterNumber - 1U].CAN_F0;
+        extMsgIDFilterElement->CAN_F1 = can0Obj.msgRAMConfig.extMsgIDFilterAddress[filterNumber - 1U].CAN_F1;
+        retval = true;
+    }
+    return retval;
+}
 
 void CAN0_SleepModeEnter(void)
 {

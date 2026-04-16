@@ -49,7 +49,7 @@ typedef struct
 
 static PWM_Local_t p = { 0 };
 
-/*static const uint16_t gamma8[] = {
+static const uint16_t gamma8[] = {
       0,    0,    0,    0,    1,    1,    2,    3,    4,    6,    8,   10,   13,   16,   19,   24,
      28,   33,   39,   46,   53,   60,   69,   78,   88,   98,  110,  122,  135,  149,  164,  179,
     196,  214,  232,  252,  273,  295,  317,  341,  366,  393,  420,  449,  478,  510,  542,  575,
@@ -66,7 +66,7 @@ static PWM_Local_t p = { 0 };
   37046,37547,38052,38561,39075,39593,40116,40643,41175,41711,42251,42796,43346,43899,44458,45021,
   45588,46161,46737,47319,47905,48495,49091,49691,50295,50905,51519,52138,52761,53390,54023,54661,
   55303,55951,56604,57261,57923,58590,59262,59939,60621,61308,62000,62697,63399,64106,64818,65535
-  };*/
+  };
 
 /*>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 /*                         PUBLIC FUNCTIONS                             */
@@ -76,16 +76,16 @@ void PwmDrv_Init(void)
 {
     TCC0_PWMStart();
 
-    p.period0 = TCC0_PWM16bitPeriodGet();
+    p.period0 = 5600U;
     ASSERT(p.period0);
 }
 
-bool PwmDrv_SetLevel(uint8_t idx, uint16_t level)
+bool PwmDrv_SetLevel(uint8_t idx, uint8_t level)
 {
     switch(idx) 
     {
     case 0:
-        TCC0_PWM16bitDutySet(TCC0_CHANNEL1, (level * p.period0 / 0xFFFF));
+        TCC0_PWM16bitDutySet(TCC0_CHANNEL1, (gamma8[level] * p.period0 / 0xFFFF));
         return true;
     }
     ASSERT(false);
